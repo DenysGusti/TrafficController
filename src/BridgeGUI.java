@@ -7,7 +7,6 @@ public class BridgeGUI {
         }
     }
 
-
     public static void main(String[] a) {
         final var win = new CarWindow();
 
