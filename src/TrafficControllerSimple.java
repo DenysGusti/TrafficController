@@ -15,7 +15,6 @@ public class TrafficControllerSimple implements TrafficController {
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }
-
         bridgeOccupied = true;
         registrar.registerRight(v);
         System.out.println("Vehicle " + v.getId() + " entered from the right.");
@@ -29,7 +28,6 @@ public class TrafficControllerSimple implements TrafficController {
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }
-
         bridgeOccupied = true;
         registrar.registerLeft(v);
         System.out.println("Vehicle " + v.getId() + " entered from the left.");
@@ -40,7 +38,7 @@ public class TrafficControllerSimple implements TrafficController {
         registrar.deregisterLeft(v);
         System.out.println("Vehicle " + v.getId() + " left to the left.");
         bridgeOccupied = false;
-        notify();
+        notifyAll();
     }
 
     @Override
@@ -48,6 +46,6 @@ public class TrafficControllerSimple implements TrafficController {
         registrar.deregisterRight(v);
         System.out.println("Vehicle " + v.getId() + " left to the right.");
         bridgeOccupied = false;
-        notify();
+        notifyAll();
     }
 }

@@ -21,15 +21,17 @@ public class TrafficControllerFair implements TrafficController {
             // finally would never run and the lock would never unlock
             while (bridgeOccupied)
                 bridgeFree.await();
+
+            bridgeOccupied = true;
+            registrar.registerRight(v);
+            System.out.println("Vehicle " + v.getId() + " entered from the right.");
+
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         } finally {
+            // we unlock only after we have used all global variables
             lock.unlock();
         }
-
-        bridgeOccupied = true;
-        registrar.registerRight(v);
-        System.out.println("Vehicle " + v.getId() + " entered from the right.");
     }
 
     @Override
@@ -40,15 +42,17 @@ public class TrafficControllerFair implements TrafficController {
             // finally would never run and the lock would never unlock
             while (bridgeOccupied)
                 bridgeFree.await();
+
+            bridgeOccupied = true;
+            registrar.registerLeft(v);
+            System.out.println("Vehicle " + v.getId() + " entered from the left.");
+
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         } finally {
+            // we unlock only after we have used all global variables
             lock.unlock();
         }
-
-        bridgeOccupied = true;
-        registrar.registerLeft(v);
-        System.out.println("Vehicle " + v.getId() + " entered from the left.");
     }
 
     @Override
@@ -58,7 +62,7 @@ public class TrafficControllerFair implements TrafficController {
             registrar.deregisterLeft(v);
             System.out.println("Vehicle " + v.getId() + " left to the left.");
             bridgeOccupied = false;
-            bridgeFree.signal();
+            bridgeFree.signalAll();
         } finally {
             lock.unlock();
         }
@@ -71,7 +75,7 @@ public class TrafficControllerFair implements TrafficController {
             registrar.deregisterRight(v);
             System.out.println("Vehicle " + v.getId() + " left to the right.");
             bridgeOccupied = false;
-            bridgeFree.signal();
+            bridgeFree.signalAll();
         } finally {
             lock.unlock();
         }
